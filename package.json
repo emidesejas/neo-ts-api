@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "prestart": "yarn build",
+    "prestart:development": "yarn build",
     "start": "node .",
     "start:development": "nodemon --ext ts --exec 'tslint -c tslint.json -p tsconfig.json --fix && yarn start'",
     "test": "echo \"Error: no test specified\" && exit 1",
