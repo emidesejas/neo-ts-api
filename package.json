@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
     "prestart": "yarn build",
     "start": "node .",
-    "start:develop": "nodemon --ext ts --exec 'yarn start'",
+    "start:development": "nodemon --ext ts --exec 'tslint -c tslint.json -p tsconfig.json --fix && yarn start'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Emiliano de Sejas",
