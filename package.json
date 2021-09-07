@@ -7,7 +7,8 @@
     "prestart": "yarn build",
     "start": "node .",
     "start:development": "nodemon --ext ts --exec 'tslint -c tslint.json -p tsconfig.json --fix && yarn start'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "tsc"
   },
   "author": "Emiliano de Sejas",
   "license": "MIT",
