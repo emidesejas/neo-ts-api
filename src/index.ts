@@ -5,6 +5,8 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import * as router from "./routes"
 
+import "reflect-metadata";
+
 dotenv.config();
 
 const port = process.env.PORT;
