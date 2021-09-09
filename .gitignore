@@ -21,6 +21,7 @@ coverage
 
 # API keys and secrets
 .env
+ormconfig.env
 
 # Dependency directory
 node_modules
