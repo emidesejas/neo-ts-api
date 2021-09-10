@@ -1,15 +1,18 @@
 import { Request } from "express";
 import { Response } from "express";
+import Project from '../entity/Project';
 import { getManager, Repository } from "typeorm"
 import User from "../entity/User";
 
 export default class UserController {
-
   repo: Repository<User>;
+  projectsRepo: Repository<Project>;
 
   constructor () {
     this.repo = getManager().getRepository(User);
+    this.projectsRepo = getManager().getRepository(Project);
   }
+
   async index(req: Request, res: Response) {
     res.send(await this.repo.find({ select: ['id', 'firstName', 'lastName', 'email'] }));
   }
@@ -35,7 +38,7 @@ export default class UserController {
     user.password = password;
 
     await this.repo.save(user);
-    res.send(this.userData(user));
+    res.send(user);
   }
 
   async getUser(req: Request, res: Response) {
@@ -44,11 +47,7 @@ export default class UserController {
       return;
     }
 
-    res.send(
-      this.userData(
-        await this.repo.findOne({ id: parseInt(req.params.id, 10) })
-      )
-    );
+    res.send(await this.repo.findOne({ id: parseInt(req.params.id, 10) }, { relations: ['projects'] }));
   }
 
   async deleteUser(req: Request, res: Response) {
@@ -66,8 +65,40 @@ export default class UserController {
     }
   }
 
-  private userData (user: User) {
-    const { password, ...userData } = user;
-    return userData;
+  async createUserProject(req: Request, res: Response) {
+    const owner = await this.repo.findOne({ id: parseInt(req.params.userId, 10) })
+
+    if (!req.params.userId || !req.body.name || !owner) {
+      res.status(400).send();
+      return;
+    }
+
+    const {
+      name,
+      description
+    } = req.body;
+
+    const project = new Project();
+    project.name = name;
+    project.description = description;
+    project.owner = owner;
+
+    await this.projectsRepo.save(project);
+    res.send(project);
+  }
+
+  async getUserProjects(req: Request, res: Response) {
+    const {
+      userId
+    } = req.params;
+
+    const owner = await this.repo.findOne({ id: parseInt(userId, 10) }, { relations: ['projects'] });
+
+    if (!owner) {
+      res.status(400).send();
+      return;
+    }
+
+    res.send(owner.projects);
   }
 }

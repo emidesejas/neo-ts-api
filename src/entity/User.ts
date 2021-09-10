@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, OneToMany } from "typeorm";
 import Bcrypt from "bcrypt";
+import Project from "./Project";
 
 @Entity()
 export default class User {
@@ -16,7 +17,7 @@ export default class User {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @BeforeInsert()
@@ -25,5 +26,18 @@ export default class User {
     if (this.password) {
       this.password = Bcrypt.hashSync(this.password, parseInt(process.env.SALT_ROUNDS, 10));
     }
+  }
+
+  @OneToMany(() => Project, project => project.owner, {
+    eager: false
+  })
+  projects: Project[];
+
+  safeData() {
+    const {
+      password,
+      ...data
+    } = this;
+    return data;
   }
 }
