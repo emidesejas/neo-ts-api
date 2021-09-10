@@ -36,7 +36,7 @@ export class CreateUsers1631211819388 implements MigrationInterface {
     await queryRunner.createIndex("user", new TableIndex({
       name: "IDX_USER_EMAIL",
       columnNames: ["email"]
-  }));
+    }));
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
