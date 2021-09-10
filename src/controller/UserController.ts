@@ -51,6 +51,21 @@ export default class UserController {
     );
   }
 
+  async deleteUser(req: Request, res: Response) {
+    if (!req.params.id) {
+      res.status(400).send();
+      return;
+    }
+
+    const user = await this.repo.findOne({ id: parseInt(req.params.id, 10) });
+    if (user) {
+      this.repo.remove(user);
+      res.send(200);
+    } else {
+      res.send(400);
+    }
+  }
+
   private userData (user: User) {
     const { password, ...userData } = user;
     return userData;

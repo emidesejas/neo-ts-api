@@ -18,4 +18,6 @@ export const register = (app: Application) => {
   app.get('/users/:id', async (req, res) => {
     new UserController().getUser(req, res);
   });
+
+  app.delete('/users/:id', async (req, res) => new UserController().deleteUser(req, res));
 }
