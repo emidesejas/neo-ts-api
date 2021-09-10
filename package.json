@@ -5,10 +5,10 @@
   "scripts": {
     "build": "tsc",
     "lint": "tslint -c tslint.json -p tsconfig.json --fix",
-    "start": "yarn build && node build/index.js",
+    "start": "node build/index.js",
     "start:development": "nodemon --ext ts --exec 'yarn lint && ts-node src/index.ts'",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "heroku-postbuild": "tsc && yarn typeorm migration:run",
+    "heroku-postbuild": "yarn build && yarn typeorm migration:run",
     "typeorm": "ts-node ./node_modules/.bin/typeorm"
   },
   "author": "Emiliano de Sejas",
